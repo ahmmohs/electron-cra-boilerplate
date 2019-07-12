@@ -1,68 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Boilerplate for an electron app that uses React for front end.
 
-## Available Scripts
+## Basic Overview
 
-In the project directory, you can run:
+I've provided an example app that you can efficiently work with in a dev enviroment, and build and package for production. I've also included one example of communication between the ipcRenderer and ipcMain.
 
-### `npm start`
+### Dependencies
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Install all the dependencies
+For normal dependencies: `npm install`
+For dev dependencies: `npm install --save-dev concurrently wait-on electron electron-builder`
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Dev script
 
-### `npm test`
+```json
+"start-electron": "electron .",
+"dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && npm run start-electron\""
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The line above uses CRA's start script to start the react app, and the wait-on module waits for localhost:3000 to be live before starting the electron app.
 
-### `npm run build`
+### Before packaging
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+There are three things that you need in your package.json (already in my code, just explaining) before you can package the app.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+First:
+```json
+"homepage": "./"
+```
+This is required so that the packaged app can find all the required CSS and JS files.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Second:
+```json
+"author": "ahmmohs"
+```
 
-### `npm run eject`
+Finally, most importantly:
+```json
+"build": {
+    "appId": "com.github.ahmmohs.electroncra",
+    "files": [
+      "build/**/*", 
+      "node_modules/**/*", 
+      "!build-scripts${/*}"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  }
+```
+These are just other things that are required by electron-builder or else it will complain.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Packaging the app
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Finally you can package the app. The first command will be so that you can build the React app. You can either do `npm run build` or `npm run preelectron-pack`. Both do the same thing, and build the React app.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+After building the React app you are ready to package the electron app. Run `npm run pack-all` (if you're on Mac) or `npm run pack-win` (if you're on Win). 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+The app will get packaged and placed into the `dist` folder. You can go in there and you'll find all the files needed to distribute you're packaged app! :D
