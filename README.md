@@ -17,7 +17,7 @@ For dev dependencies: `npm install --save-dev concurrently wait-on electron elec
 "dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && npm run start-electron\""
 ```
 
-The line above uses CRA's start script to start the react app, and the wait-on module waits for localhost:3000 to be live before starting the electron app.
+The line above uses CRA's start script to start the react app and the SET BROWSER=none arguement so that Chrome (or your default browser) does not open automatically, and the wait-on module waits for localhost:3000 to be live before starting the electron app.
 
 ### Before packaging
 
