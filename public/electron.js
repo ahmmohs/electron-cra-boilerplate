@@ -1,9 +1,8 @@
 const electron = require('electron');
-const { BrowserWindow, ipcMain } = electron;
+const { app, BrowserWindow, ipcMain } = electron;
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-const app = electron.app;
 let mainWindow;
 
 /**
@@ -22,7 +21,8 @@ function createWindow() {
             nodeIntegration: true,
             preload: __dirname + '/preload.js'
         },
-        show: true
+        frame: true,
+        show: false
     });
 
     // set the view for the window, by either going to localhost:3000
@@ -43,7 +43,7 @@ function createWindow() {
         console.log('Got called to close the app')
         e.preventDefault();
         process.exit();
-    })
+    });
 
 }
 

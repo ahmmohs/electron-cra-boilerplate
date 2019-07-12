@@ -24,10 +24,25 @@
     "eject": "react-scripts eject",
     "start-electron": "electron .",
     "dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && npm run start-electron\"",
-    "pack-all": "build --em.main=build/electron.js --mac --win -p always",
-    "pack-win": "build --em.main=build/electron.js --win",
-    "preelectron-pack": "npm run build"
+    "pack-all": "electron-builder --em.main=build/electron.js --mac --win -p always",
+    "pack-win": "electron-builder -c.extraMetadata.main=build/electron.js --win",
+    "preelectron-pack": "npm run build",
+    "dist": "npm run build && build",
+    "pack": "build --dir",
+    "postinstall": "install-app-deps"
   },
+  "build": {
+    "appId": "com.github.ahmmohs.electroncra",
+    "files": [
+      "build/**/*", 
+      "node_modules/**/*", 
+      "!build-scripts${/*}"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "author": "ahmmohs",
   "eslintConfig": {
     "extends": "react-app"
   },
